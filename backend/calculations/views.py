@@ -1,15 +1,25 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, Http404
+from django.middleware.csrf import get_token
 from calculations.calculator import Calculator
+
+import json
 
 # Create your views here.
 def index(request):
     return HttpResponse("Index endpoint")
 
+def csrf(request):
+    return JsonResponse({'csrfToken': get_token(request)})
+
+def ping(request):
+    return JsonResponse({'result': 'OK'})
+
 def api(request):
     if request.method == "POST":
-        principal = request.POST.principal
-        interest_rate = request.POST.interest_rate
+        body_data = json.loads(request.body)
+        principal = body_data['principal']
+        interest_rate = body_data['interest_rate']
     
         one_year = Calculator().calculate_compound_interest(principal, interest_rate, 1)
         five_years = Calculator().calculate_compound_interest(principal, interest_rate, 5)
@@ -18,7 +28,7 @@ def api(request):
         fifty_years = Calculator().calculate_compound_interest(principal, interest_rate, 50)
 
         return JsonResponse({
-            'one year': one_year,
+            'one_year': one_year,
             'five_years': five_years,
             'ten_years': ten_years,
             'twenty_years': twenty_years,

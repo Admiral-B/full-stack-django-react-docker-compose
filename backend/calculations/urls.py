@@ -19,5 +19,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name="index"),
-    path('api/', views.api, name="api")
+    path('api/', views.api, name="api"),
+    path('csrf/', views.csrf),
+    path('ping/', views.ping)
 ]
