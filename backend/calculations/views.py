@@ -20,20 +20,8 @@ def api(request):
         body_data = json.loads(request.body)
         principal = body_data['principal']
         interest_rate = body_data['interest_rate']
-    
-        one_year = Calculator().calculate_compound_interest(principal, interest_rate, 1)
-        five_years = Calculator().calculate_compound_interest(principal, interest_rate, 5)
-        ten_years = Calculator().calculate_compound_interest(principal, interest_rate, 10)
-        twenty_years = Calculator().calculate_compound_interest(principal, interest_rate, 20)
-        fifty_years = Calculator().calculate_compound_interest(principal, interest_rate, 50)
 
-        return JsonResponse({
-            'one_year': one_year,
-            'five_years': five_years,
-            'ten_years': ten_years,
-            'twenty_years': twenty_years,
-            'fifty_years': fifty_years
-        })
+        return JsonResponse(Calculator().calculate_compound_interest(principal, interest_rate))
 
     else:
         raise Http404("Invalid Request")
