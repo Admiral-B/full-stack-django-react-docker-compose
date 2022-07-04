@@ -24,9 +24,17 @@
   font-size: 3rem;
 }
 
-.interest-timeline {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.grid {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-areas:
+    "interest-rate  year-1  year-2  year-5  year-10   year-20"
+    "main-rate      mr-1    mr-2    mr-5    mr-10     mr-20"
+    "plus-1-rate    p1-1    p1-2    p1-5    p1-10     p1-20"
+    "plus-2-rate    p2-1    p2-2    p2-5    p2-10     p2-20";
+  grid-template-rows: repeat(4, 25%);
+  grid-template-columns: auto auto auto auto auto;
+  width: 50%;
+  justify-items: center;
   align-items: center;
 }

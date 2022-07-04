@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import {
   AnimatedAxis,
   AnimatedGrid,
-  AnimatedLineSeries,
   AnimatedAreaSeries,
   XYChart,
   Tooltip,
 } from '@visx/xychart'
+import * as curves from '@visx/curve'
 import './App.css'
 
 interface IChartValue {
@@ -381,33 +381,110 @@ function App() {
         </div>
       </div>
       <br />
-      <div className='interest-timeline'>
-        <XYChart height={500} width={800} xScale={{ type: 'band' }} yScale={{ type: 'linear' }}>
-          <AnimatedAxis orientation='bottom' />
-          <AnimatedGrid columns numTicks={4} />
-          <AnimatedAreaSeries dataKey='Line 3' data={amountValues.plus_two_series} {...accessors} />
-          <AnimatedAreaSeries dataKey='Line 2' data={amountValues.plus_one_series} {...accessors} />
-          <AnimatedAreaSeries dataKey='Line 1' data={amountValues.main_series} {...accessors} />
-          <Tooltip
-            snapTooltipToDatumX
-            snapTooltipToDatumY
-            showVerticalCrosshair
-            showSeriesGlyphs
-            renderTooltip={({ tooltipData, colorScale }) => (
-              <div>
-                <div style={{ color: colorScale(tooltipData?.nearestDatum.key) }}>
-                  {tooltipData?.nearestDatum.key}
-                </div>
+      <XYChart height={500} width={800} xScale={{ type: 'band' }} yScale={{ type: 'linear' }}>
+        <AnimatedAxis label='Years' orientation='bottom' />
+        <AnimatedAxis label='Amount / £' orientation='left' labelOffset={22} />
+        <AnimatedGrid rows columns numTicks={8} />
+        <AnimatedAreaSeries curve={curves.curveCardinal} fillOpacity={.4} dataKey={(interestRate + 2).toString() + "% Interest"} data={amountValues.plus_two_series} {...accessors} />
+        <AnimatedAreaSeries curve={curves.curveCardinal} fillOpacity={.4} dataKey={(interestRate + 1).toString() + "% Interest"} data={amountValues.plus_one_series} {...accessors} />
+        <AnimatedAreaSeries curve={curves.curveCardinal} fillOpacity={.4} dataKey={interestRate.toString() + "% Interest"} data={amountValues.main_series} {...accessors} />
+        <Tooltip
+          snapTooltipToDatumX
+          snapTooltipToDatumY
+          showVerticalCrosshair
+          showSeriesGlyphs
+          renderTooltip={({ tooltipData }) => {
+            if (tooltipData !== undefined) {
+              return (
                 <div>
-                  {accessors.xAccessor(tooltipData?.nearestDatum.datum)}
+                  <div>
+                    {tooltipData.nearestDatum.key}
+                  </div>
+                  <div>
+                    Year: {accessors.xAccessor(tooltipData.nearestDatum.datum)}
+                  </div>
+                  <div>
+                    £{accessors.yAccessor(tooltipData.nearestDatum.datum)}
+                  </div>
                 </div>
-                <div>
-                  {accessors.yAccessor(tooltipData?.nearestDatum.datum)}
-                </div>
-              </div>
-            )}
-          />
-        </XYChart>
+              )
+            }
+          }}
+        />
+      </XYChart>
+      <div className='grid'>
+        <div style={{ gridArea: 'interest-rate' }}>
+          <h2>Interest Rate</h2>
+        </div>
+        <div style={{ gridArea: 'year-1' }}>
+          <h2>Year 1</h2>
+        </div>
+        <div style={{ gridArea: 'year-2' }}>
+          <h2>Year 2</h2>
+        </div>
+        <div style={{ gridArea: 'year-5' }}>
+          <h2>Year 5</h2>
+        </div>
+        <div style={{ gridArea: 'year-10' }}>
+          <h2>Year 10</h2>
+        </div>
+        <div style={{ gridArea: 'year-20' }}>
+          <h2>Year 20</h2>
+        </div>
+        <div style={{ gridArea: 'main-rate' }}>
+          <h3>{interestRate}%</h3>
+        </div>
+        <div style={{ gridArea: 'mr-1' }}>
+          <h3>{amountValues.main_series[1].Amount}</h3>
+        </div>
+        <div style={{ gridArea: 'mr-2' }}>
+          <h3>{amountValues.main_series[2].Amount}</h3>
+        </div>
+        <div style={{ gridArea: 'mr-5' }}>
+          <h3>{amountValues.main_series[5].Amount}</h3>
+        </div>
+        <div style={{ gridArea: 'mr-10' }}>
+          <h3>{amountValues.main_series[10].Amount}</h3>
+        </div>
+        <div style={{ gridArea: 'mr-20' }}>
+          <h3>{amountValues.main_series[20].Amount}</h3>
+        </div>
+        <div style={{ gridArea: 'plus-1-rate' }}>
+          <h3>{interestRate + 1}%</h3>
+        </div>
+        <div style={{ gridArea: 'p1-1' }}>
+          <h3>{amountValues.plus_one_series[1].Amount}</h3>
+        </div>
+        <div style={{ gridArea: 'p1-2' }}>
+          <h3>{amountValues.plus_one_series[2].Amount}</h3>
+        </div>
+        <div style={{ gridArea: 'p1-5' }}>
+          <h3>{amountValues.plus_one_series[5].Amount}</h3>
+        </div>
+        <div style={{ gridArea: 'p1-10' }}>
+          <h3>{amountValues.plus_one_series[10].Amount}</h3>
+        </div>
+        <div style={{ gridArea: 'p1-20' }}>
+          <h3>{amountValues.plus_one_series[20].Amount}</h3>
+        </div>
+        <div style={{ gridArea: 'plus-2-rate' }}>
+          <h3>{interestRate + 2}%</h3>
+        </div>
+        <div style={{ gridArea: 'p2-1' }}>
+          <h3>{amountValues.plus_two_series[1].Amount}</h3>
+        </div>
+        <div style={{ gridArea: 'p2-2' }}>
+          <h3>{amountValues.plus_two_series[2].Amount}</h3>
+        </div>
+        <div style={{ gridArea: 'p2-5' }}>
+          <h3>{amountValues.plus_two_series[5].Amount}</h3>
+        </div>
+        <div style={{ gridArea: 'p2-10' }}>
+          <h3>{amountValues.plus_two_series[10].Amount}</h3>
+        </div>
+        <div style={{ gridArea: 'p2-20' }}>
+          <h3>{amountValues.plus_two_series[20].Amount}</h3>
+        </div>
       </div>
     </div>
   )
