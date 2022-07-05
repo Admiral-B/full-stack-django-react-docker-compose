@@ -1,0 +1,14 @@
+{
+  "name": "full-stack-django-react-docker-compose",
+  "version": "1.0.0",
+  "repository": "https://github.com/Admiral-B/full-stack-django-react-docker-compose.git",
+  "author": "Admiral-B <gtiw@hotmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "concurrently \"cd ./backend && python manage.py runserver\" \"cd ./frontend && yarn dev \""
+  },
+  "dependencies": {
+    "concurrently": "^7.2.2"
+  }
+}
