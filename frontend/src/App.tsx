@@ -6,6 +6,7 @@ import {
   XYChart,
   Tooltip,
 } from '@visx/xychart'
+import { useTooltip } from '@visx/tooltip'
 import * as curves from '@visx/curve'
 import './App.css'
 
@@ -21,6 +22,10 @@ const accessors = {
   yAccessor: (d: IChartValue) => d.Amount
 }
 
+const {
+  tooltipData,
+  tooltipOpen
+} = useTooltip();
 
 function App() {
   const [principal, setPrincipal] = useState(500)
@@ -84,29 +89,27 @@ function App() {
         <AnimatedAreaSeries curve={curves.curveCardinal} fillOpacity={.4} dataKey={(interestRate + 2).toString() + "% Interest"} data={amountValues.plus_two_series} {...accessors} />
         <AnimatedAreaSeries curve={curves.curveCardinal} fillOpacity={.4} dataKey={(interestRate + 1).toString() + "% Interest"} data={amountValues.plus_one_series} {...accessors} />
         <AnimatedAreaSeries curve={curves.curveCardinal} fillOpacity={.4} dataKey={interestRate.toString() + "% Interest"} data={amountValues.main_series} {...accessors} />
-        <Tooltip
+        {tooltipData !== undefined && (
+          <Tooltip
           snapTooltipToDatumX
           snapTooltipToDatumY
           showVerticalCrosshair
           showSeriesGlyphs
-          renderTooltip={({ tooltipData }) => {
-            if (tooltipData !== undefined) {
-              return (
-                <div>
-                  <div>
-                    {tooltipData.nearestDatum.key}
-                  </div>
-                  <div>
-                    Year: {accessors.xAccessor(tooltipData.nearestDatum.datum)}
-                  </div>
-                  <div>
-                    £{accessors.yAccessor(tooltipData.nearestDatum.datum)}
-                  </div>
-                </div>
-              )
-            }
-          }}
+          renderTooltip={({ tooltipData, colorScale }) => (
+            <div>
+              <div style={{ color: colorScale(tooltipData?.nearestDatum.key) }}>
+                {tooltipData.nearestDatum.key}
+              </div>
+              <div>
+                Year: {accessors.xAccessor(tooltipData.nearestDatum.datum)}
+              </div>
+              <div>
+                £{accessors.yAccessor(tooltipData.nearestDatum.datum)}
+              </div>
+            </div>
+          )}
         />
+        )}
       </XYChart>
       <div className='grid'>
         <div style={{ gridArea: 'interest-rate' }}>
