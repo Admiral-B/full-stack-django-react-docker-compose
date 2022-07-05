@@ -4,6 +4,8 @@ This project demonstrates a python django server backend API and a react typescr
 
 All compound interest calculations are performed on the backend, taking the prinicipal amount and interest rate from the frontend and returning a series of values for the interest amount.
 
+![Demonstration GIF](demo.gif "Animated demonstration of Compound Interest Rate Calculator")
+
 ## Running the project with Docker
 In order to run the project with Docker please ensure you have docker and docker-compose installed on your machine. Instructions on how to do this can be found [here](https://docs.docker.com/get-docker/)
 
