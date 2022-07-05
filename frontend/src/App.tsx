@@ -29,6 +29,7 @@ const formatCurrency = (amount: number) => {
 
 const App = () => {
   const [principal, setPrincipal] = useState(500)
+  const [monthly, setMonthly] = useState(500)
   const [interestRate, setInterestRate] = useState(3)
   const [amountValues, setAmountValues] = useState<InterestResponse>(new InterestResponse())
 
@@ -50,15 +51,15 @@ const App = () => {
 
   useEffect(() => {
     if (csrfToken !== '') {
-      CalculateValues(csrfToken, principal, interestRate)
+      CalculateValues(csrfToken, principal, interestRate, monthly)
         .then((resp: IInterestResponse) => setAmountValues(resp))
     }
-  }, [principal, interestRate])
+  }, [principal, interestRate, monthly])
 
   return (
     <div className="App">
       <h1>Compound Interest Calculator</h1>
-      <p>Please input your initial principal amount and select your annual interest rate</p>
+      <p>Please input your initial principal amount, monthly deposit and select your interest rate</p>
       <div className='sliders-section'>
         <div className='slider-section'>
           <label>Principal</label>
@@ -69,6 +70,16 @@ const App = () => {
             max={5000}
             value={principal}
             onChange={(e) => setPrincipal(parseInt(e.target.value))} />
+        </div>
+        <div className='slider-section'>
+          <label>Monthly Deposit</label>
+          <div className="amount">£{monthly}</div>
+          <input
+            type="range"
+            min={100}
+            max={5000}
+            value={monthly}
+            onChange={(e) => setMonthly(parseInt(e.target.value))} />
         </div>
         <div className='slider-section'>
           <label>Interest Rate</label>
@@ -82,9 +93,14 @@ const App = () => {
         </div>
       </div>
       <br />
-      <XYChart height={400} width={800} xScale={{ type: 'band' }} yScale={{ type: 'linear' }}>
+      <XYChart
+        height={400}
+        width={800}
+        xScale={{ type: 'band' }}
+        yScale={{ type: 'linear' }}
+      >
         <AnimatedAxis label='Years' orientation='bottom' />
-        <AnimatedAxis label='Amount / £' orientation='left' labelOffset={22} />
+        <AnimatedAxis orientation='left'/>
         <AnimatedGrid rows columns numTicks={8} />
         <AnimatedAreaSeries curve={curves.curveCardinal} fillOpacity={.6} dataKey={(interestRate + 2).toString() + "% Interest"} data={amountValues.plus_two_series} {...accessors} />
         <AnimatedAreaSeries curve={curves.curveCardinal} fillOpacity={.6} dataKey={(interestRate + 1).toString() + "% Interest"} data={amountValues.plus_one_series} {...accessors} />
@@ -109,6 +125,9 @@ const App = () => {
         <div style={{ gridArea: 'year-20' }}>
           <h2>Year 20</h2>
         </div>
+        <div style={{ gridArea: 'year-50' }}>
+          <h2>Year 50</h2>
+        </div>
         <div style={{ gridArea: 'main-rate' }}>
           <h3>{interestRate}%</h3>
         </div>
@@ -126,6 +145,9 @@ const App = () => {
         </div>
         <div style={{ gridArea: 'mr-20' }}>
           <h3>{formatCurrency(amountValues.main_series[20].Amount)}</h3>
+        </div>
+        <div style={{ gridArea: 'mr-50' }}>
+          <h3>{formatCurrency(amountValues.main_series[50].Amount)}</h3>
         </div>
         <div style={{ gridArea: 'plus-1-rate' }}>
           <h3>{interestRate + 1}%</h3>
@@ -145,6 +167,9 @@ const App = () => {
         <div style={{ gridArea: 'p1-20' }}>
           <h3>{formatCurrency(amountValues.plus_one_series[20].Amount)}</h3>
         </div>
+        <div style={{ gridArea: 'p1-50' }}>
+          <h3>{formatCurrency(amountValues.plus_one_series[50].Amount)}</h3>
+        </div>
         <div style={{ gridArea: 'plus-2-rate' }}>
           <h3>{interestRate + 2}%</h3>
         </div>
@@ -162,6 +187,9 @@ const App = () => {
         </div>
         <div style={{ gridArea: 'p2-20' }}>
           <h3>{formatCurrency(amountValues.plus_two_series[20].Amount)}</h3>
+        </div>
+        <div style={{ gridArea: 'p2-50' }}>
+          <h3>{formatCurrency(amountValues.plus_two_series[50].Amount)}</h3>
         </div>
       </div>
     </div>

@@ -20,8 +20,9 @@ def api(request):
         body_data = json.loads(request.body)
         principal = body_data['principal']
         interest_rate = body_data['interest_rate']
+        monthly_deposit = body_data['monthly_deposit']
 
-        return JsonResponse(Calculator().calculate_compound_interest(principal, interest_rate))
+        return JsonResponse(Calculator().calculate_compound_interest(principal, interest_rate, monthly_deposit))
 
     else:
         raise Http404("Invalid Request")

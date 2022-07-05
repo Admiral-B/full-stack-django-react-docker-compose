@@ -12,7 +12,7 @@ export const getCsrfToken = async () => {
   return data.csrfToken
 }
 
-export const CalculateValues = async (csrfToken: string, principal: number, interestRate: number) => {
+export const CalculateValues = async (csrfToken: string, principal: number, interestRate: number, monthlyDeposit: number) => {
   let requestOptions: RequestInit = {
     method: 'POST',
     headers: {
@@ -22,7 +22,8 @@ export const CalculateValues = async (csrfToken: string, principal: number, inte
     credentials: 'include',
     body: JSON.stringify({
       principal: principal,
-      interest_rate: interestRate
+      interest_rate: interestRate,
+      monthly_deposit: monthlyDeposit
     })
   }
 
