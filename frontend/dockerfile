@@ -1,4 +1,12 @@
-FROM node:latest
+# Build App
+FROM node:latest as build
 WORKDIR /app
 COPY . ./
 RUN yarn
+COPY . ./
+# RUN yarn build
+
+# Run App in Production
+# FROM nginx:stable-alpine
+# COPY --from=build /app/dist /usr/nginx/html
+# EXPOSE 80
